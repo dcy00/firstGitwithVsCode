@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script src="">
+        function method(obj,name,fnc){
+            var old = obj[name];
+            console.log(old instanceof Function);
+            obj[name] = function(){
+                console.log(arguments.length+" "+fnc.length);
+                if(arguments.length === fnc.length){
+                    return fnc.apply(this,arguments);
+                }else if(typeof old === "function"){
+                    return old.apply(this,arguments);
+                }
+            }
+        }
+        var people = {
+            values:["Zhang san","Li si"]
+        };
+        method(people,"find",function(){
+            console.log("无参数");
+            return this.values;
+        })
+        method(people,"find",function(firstname){
+            console.log("一个参数");
+            var ret = [];
+            for(var i = 0;i < this.values.length;i++){
+                if(this.values[i].indexOf(firstname) === 0){
+                    ret.push(this.values[i])
+                }
+            }
+            return ret;
+        })
+        method(people,"find",function(firstname,lastname){
+            console.log("两个参数");
+            var ret = [];
+            for(var i = 0;i < this.values.length;i++){
+                if(this.values[i] == firstname + " " + lastname){
+                    ret.push(this.values[i])
+                }
+            }
+            return ret;
+        })
+        console.log(people.find());
+        console.log(people.find("Zhang"));
+    </script>
+</body>
+</html>
